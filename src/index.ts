@@ -1,5 +1,6 @@
 import { List } from "ts-toolbelt";
 
+// == Infos ====================================================================
 // https://stackoverflow.com/questions/23475372/extrapolate-split-cubic-bezier-to-1-1
 // https://www.the-art-of-web.com/css/timing-function/
 // https://pomax.github.io/bezierinfo/
@@ -98,4 +99,28 @@ export function splitCubicBezier(options: splicCubicBezierOptionI): splicCubicBe
   } else {
    return result;
   }
+}
+
+export function getCubicBezier(coord: bezierUnitedCoordT): bezierCoordT {
+  const x = coord.filter((_, idx: number) => (idx % 2) === 0) as bezierCoordT;
+  const y = coord.filter((_, idx: number) => (idx % 2) !== 0) as bezierCoordT;
+
+  return [x[1], y[1], x[2], y[2]];
+}
+
+function getCubicBezierResult(result: splicCubicBezierResultI) {
+  return {
+    left: getCubicBezier(result.left),
+    right: getCubicBezier(result.right)
+  };
+}
+
+export function getSplitCubicBezier(cubicBezier: cubicBezierCoordsI, rate: splicCubicBezierOptionI['z'], fitUnit: splicCubicBezierOptionI['fitUnitSquare'] = true) {
+  const splitRes = splitCubicBezier({
+    z: rate,
+    x: cubicBezier.x,
+    y: cubicBezier.y,
+    fitUnitSquare: fitUnit
+  });
+  return getCubicBezierResult(splitRes);
 }
