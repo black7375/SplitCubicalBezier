@@ -1,0 +1,13 @@
+{
+  "name": "SplitCubicalBezier",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/black7375/SplitCubicalBezier.git",
+  "author": "alstjr7375 <alstjr7375@daum.net>",
+  "license": "Unknown",
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.5"
+  }
+}
