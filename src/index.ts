@@ -23,6 +23,21 @@ interface splicCubicBezierResultI {
   right: bezierUnitedCoordT;
 }
 
+// == Basics ===================================================================
+export function createCubicBezier(x1: number, y1: number, x2: number, y2: number): cubicBezierCoordsI {
+  return {
+    x: [0, x1, x2, 1],
+    y: [0, y1, y2, 1]
+  };
+}
+
+export function getCubicBezier(coord: bezierUnitedCoordT): bezierCoordT {
+  const x = coord.filter((_, idx: number) => (idx % 2) === 0) as bezierCoordT;
+  const y = coord.filter((_, idx: number) => (idx % 2) !== 0) as bezierCoordT;
+
+  return [x[1], y[1], x[2], y[2]];
+}
+
 // == Fit Unit Square ==========================================================
 function fitCoord(el: bezierUnitedCoordT[number], selfCoord: bezierUnitedCoordT, minI: number, maxI: number): bezierUnitedCoordT[number] {
   const coordMin = selfCoord[minI];    // should be 0
@@ -99,13 +114,6 @@ export function splitCubicBezier(options: splicCubicBezierOptionI): splicCubicBe
   } else {
    return result;
   }
-}
-
-export function getCubicBezier(coord: bezierUnitedCoordT): bezierCoordT {
-  const x = coord.filter((_, idx: number) => (idx % 2) === 0) as bezierCoordT;
-  const y = coord.filter((_, idx: number) => (idx % 2) !== 0) as bezierCoordT;
-
-  return [x[1], y[1], x[2], y[2]];
 }
 
 function getCubicBezierResult(result: splicCubicBezierResultI) {
