@@ -23,6 +23,15 @@ interface splicCubicBezierResultI {
   right: bezierUnitedCoordT;
 }
 
+// == Presets ==================================================================
+export const linear      = createCubicBezier(0, 0, 1, 1);
+export const cubicBezier = createCubicBezier(0, 1, 1, 0);
+
+export const ease      = createCubicBezier(0.25, 0.1, 0.25, 1);
+export const easeIn    = createCubicBezier(0.42, 0,   1,    1);
+export const easeOut   = createCubicBezier(0,    0,   0.58, 1);
+export const easeInOut = createCubicBezier(0.42, 0,   0.58, 1);
+
 // == Basics ===================================================================
 export function createCubicBezier(x1: number, y1: number, x2: number, y2: number): cubicBezierCoordsI {
   return {
