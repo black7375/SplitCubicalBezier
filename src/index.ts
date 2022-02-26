@@ -4,6 +4,7 @@ import { List } from "ts-toolbelt";
 // https://stackoverflow.com/questions/23475372/extrapolate-split-cubic-bezier-to-1-1
 // https://www.the-art-of-web.com/css/timing-function/
 // https://pomax.github.io/bezierinfo/
+// https://easings.net/
 
 // == Types ====================================================================
 type bezierCoordT = [number, number, number, number];
@@ -31,6 +32,38 @@ export const ease      = createCubicBezier(0.25, 0.1, 0.25, 1);
 export const easeIn    = createCubicBezier(0.42, 0,   1,    1);
 export const easeOut   = createCubicBezier(0,    0,   0.58, 1);
 export const easeInOut = createCubicBezier(0.42, 0,   0.58, 1);
+
+export const easeInSine    = createCubicBezier(0.12, 0, 0.39, 0);
+export const easeOutSine   = createCubicBezier(0.61, 1, 0.88, 1);
+export const easeInOutSine = createCubicBezier(0.37, 0, 0.63, 1);
+
+export const easeInQuad    = createCubicBezier(0.11, 0, 0.5,  0);
+export const easeOutQuad   = createCubicBezier(0.5,  1, 0.89, 1);
+export const easeInOutQuad = createCubicBezier(0.45, 0, 0.55, 1);
+
+export const easeInCubic    = createCubicBezier(0.32, 0, 0.67, 0);
+export const easeOutCubic   = createCubicBezier(0.33, 1, 0.68, 1);
+export const easeInOutCubic = createCubicBezier(0.65, 0, 0.35, 1);
+
+export const easeInQuart    = createCubicBezier(0.5,  0, 0.75, 0);
+export const easeOutQuart   = createCubicBezier(0.25, 1, 0.5,  1);
+export const easeInOutQuart = createCubicBezier(0.76, 0, 0.24, 1);
+
+export const easeInQuint    = createCubicBezier(0.64, 0, 0.78, 0);
+export const easeOutQuint   = createCubicBezier(0.22, 1, 0.36, 1);
+export const easeInOutQuint = createCubicBezier(0.83, 0, 0.17, 1);
+
+export const easeInExpo    = createCubicBezier(0.7,  0,  0.84, 0);
+export const easeOutExpo   = createCubicBezier(0.16, 1,  0.3,  1);
+export const easeInOutExpo = createCubicBezier(0.87, 0,  0.13, 1);
+
+export const easeInCirc    = createCubicBezier(0.55, 0,      1,    0.45);
+export const easeOutCirc   = createCubicBezier(0,    0.55,   0.45, 1   );
+export const easeInOutCirc = createCubicBezier(0.85, 0,      0.15, 1   );
+
+export const easeInBack    = createCubicBezier(0.36, 0,    0.66, -0.56);
+export const easeOutBack   = createCubicBezier(0.34, 1.56, 0.64,  1   );
+export const easeInOutBack = createCubicBezier(0.68, -0.6, 0.32,  1.6 );
 
 // == Basics ===================================================================
 export function createCubicBezier(x1: number, y1: number, x2: number, y2: number): cubicBezierCoordsI {
