@@ -67,17 +67,19 @@ export const easeInOutBack  = createCubicBezier( 0.68, -0.6 ,  0.32,  1.6 );
 
 // == Basics ===================================================================
 export function createCubicBezier(x1: number, y1: number, x2: number, y2: number): cubicBezierCoordsI {
-  return {
+  return ({
     x: [0, x1, x2, 1],
     y: [0, y1, y2, 1]
-  };
+  });
 }
 
 export function getCubicBezier(coord: bezierUnitedCoordT): bezierCoordT {
   const x = coord.filter((_, idx: number) => (idx % 2) === 0) as bezierCoordT;
   const y = coord.filter((_, idx: number) => (idx % 2) !== 0) as bezierCoordT;
 
-  return [x[1], y[1], x[2], y[2]];
+  return [
+    x[1], y[1], x[2], y[2]
+  ];
 }
 
 // == Fit Unit Square ==========================================================
@@ -109,10 +111,10 @@ function fitUnitMap(coord: bezierUnitedCoordT): bezierUnitedCoordT {
 }
 
 function fitUnitSquare({left, right}: splicCubicBezierResultI): splicCubicBezierResultI {
-  return {
+  return ({
     left: fitUnitMap(left),
     right: fitUnitMap(right)
-  };
+  });
 }
 
 // == Split Cubic Bezier =======================================================
@@ -154,15 +156,15 @@ export function splitCubicBezier(options: splicCubicBezierOptionI): splicCubicBe
   if (options.fitUnitSquare) {
     return fitUnitSquare(result);
   } else {
-   return result;
+    return result;
   }
 }
 
 function getCubicBezierResult(result: splicCubicBezierResultI) {
-  return {
+  return ({
     left: getCubicBezier(result.left),
     right: getCubicBezier(result.right)
-  };
+  });
 }
 
 export function getSplitCubicBezier(cubicBezier: cubicBezierCoordsI, rate: splicCubicBezierOptionI['z'], fitUnit: splicCubicBezierOptionI['fitUnitSquare'] = true) {
