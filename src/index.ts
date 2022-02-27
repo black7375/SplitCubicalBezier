@@ -1,4 +1,5 @@
-import { List } from "ts-toolbelt";
+import { Flatten } from "ts-toolbelt/out/List/Flatten";
+import { Zip     } from "ts-toolbelt/out/List/Zip";
 
 // == Infos ====================================================================
 // https://stackoverflow.com/questions/23475372/extrapolate-split-cubic-bezier-to-1-1
@@ -8,7 +9,9 @@ import { List } from "ts-toolbelt";
 
 // == Types ====================================================================
 type bezierCoordT = [number, number, number, number];
-type bezierUnitedCoordT = List.Flatten<List.Zip<cubicBezierCoordsI['x'], cubicBezierCoordsI['y']>>;
+type bezierUnitedCoordT = Flatten<
+  Zip<cubicBezierCoordsI['x'], cubicBezierCoordsI['y']>
+>;
 
 interface cubicBezierCoordsI {
   x: bezierCoordT;
@@ -25,6 +28,7 @@ interface splicCubicBezierResultI {
 }
 
 // == Presets ==================================================================
+//           Name             Func               x1     y1     x2     y2
 export const linear         = createCubicBezier( 0   ,  0   ,  1   ,  1   );
 export const cubicBezier    = createCubicBezier( 0   ,  1   ,  1   ,  0   );
 
@@ -80,6 +84,18 @@ export function getCubicBezier(coord: bezierUnitedCoordT): bezierCoordT {
   return [
     x[1], y[1], x[2], y[2]
   ];
+}
+
+export function getSplitCubicBezier(
+  cubicBezier: cubicBezierCoordsI, rate: splicCubicBezierOptionI['z'], fitUnit: splicCubicBezierOptionI['fitUnitSquare'] = true
+) {
+  const splitRes = splitCubicBezier({
+    z: rate,
+    x: cubicBezier.x,
+    y: cubicBezier.y,
+    fitUnitSquare: fitUnit
+  });
+  return getCubicBezierResult(splitRes);
 }
 
 // == Fit Unit Square ==========================================================
@@ -165,14 +181,4 @@ function getCubicBezierResult(result: splicCubicBezierResultI) {
     left: getCubicBezier(result.left),
     right: getCubicBezier(result.right)
   });
-}
-
-export function getSplitCubicBezier(cubicBezier: cubicBezierCoordsI, rate: splicCubicBezierOptionI['z'], fitUnit: splicCubicBezierOptionI['fitUnitSquare'] = true) {
-  const splitRes = splitCubicBezier({
-    z: rate,
-    x: cubicBezier.x,
-    y: cubicBezier.y,
-    fitUnitSquare: fitUnit
-  });
-  return getCubicBezierResult(splitRes);
 }
