@@ -23,8 +23,18 @@ interface splicCubicBezierOptionI extends cubicBezierCoordsI {
 }
 
 interface splicCubicBezierResultI {
-  left: bezierUnitedCoordT;
+  left:  bezierUnitedCoordT;
   right: bezierUnitedCoordT;
+}
+
+interface getSplicCubicBezierResultI {
+  left:  bezierCoordT;
+  right: bezierCoordT;
+}
+
+interface splitKeyFrameResultI {
+  left:  number[];
+  right: number[];
 }
 
 // == Presets ==================================================================
@@ -90,7 +100,7 @@ export function getCubicBezier(coord: bezierUnitedCoordT): bezierCoordT {
 
 export function getSplitCubicBezier(
   cubicBezier: cubicBezierCoordsI, rate: splicCubicBezierOptionI['z'], fitUnit: splicCubicBezierOptionI['fitUnitSquare'] = true
-) {
+): getSplicCubicBezierResultI {
   const splitRes = splitCubicBezier({
     z: rate,
     x: cubicBezier.x,
@@ -98,6 +108,21 @@ export function getSplitCubicBezier(
     fitUnitSquare: fitUnit
   });
   return getCubicBezierResult(splitRes);
+}
+
+export function splitKeyFrame(time: number, boundTime: number, keyFrames: number[]): splitKeyFrameResultI {
+  const keyFrameTimes   = keyFrames.map((rate) => time * rate);
+  const leftFrameTimes  = keyFrameTimes.filter((keyTime) => keyTime <= boundTime);
+  const rightFrameTimes = keyFrameTimes.filter((keyTime) => keyTime >  boundTime);
+
+  const differTime   = time - boundTime;
+  const leftKeyRate  = leftFrameTimes.map( (keyTime) =>  keyTime / boundTime);
+  const rightKeyRate = rightFrameTimes.map((keyTime) => (keyTime - boundTime) / differTime);
+
+  return {
+    left:  leftKeyRate,
+    right: rightKeyRate
+  };
 }
 
 // == Fit Unit Square ==========================================================
@@ -178,7 +203,7 @@ export function splitCubicBezier(options: splicCubicBezierOptionI): splicCubicBe
   }
 }
 
-function getCubicBezierResult(result: splicCubicBezierResultI) {
+function getCubicBezierResult(result: splicCubicBezierResultI): getSplicCubicBezierResultI {
   return ({
     left: getCubicBezier(result.left),
     right: getCubicBezier(result.right)
