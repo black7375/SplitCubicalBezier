@@ -1,0 +1,84 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://help.github.com/actions/language-and-framework-guides/publishing-nodejs-packages
+
+name: Publishing
+
+on:
+  push:
+    tags:
+      'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+    - name: node cache
+      id: node-cache
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: yarn install
+      if: steps.node-cache.outputs.cache-hit != 'true'
+      run: yarn install
+    - run: yarn build --if-present
+      env:
+        CI: true
+    - name: Commit Build File
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        branch: main
+        file_pattern: build/*
+        commit_message: 'Fix: Automated apply build files'
+        status_options: '--untracked-files=no'
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - branch: main
+            token: NPM_TOKEN
+            registry: https://registry.npmjs.org/
+          - branch: github-repo
+            token: GITHUB_TOKEN
+            registry: https://npm.pkg.github.com/
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ matrix.branch }}
+    - name: Merge master -> github-repo
+      if: matrix.branch == 'github-repo'
+      uses: devmasx/merge-branch@1.4.0
+      with:
+        type: now
+        from_branch: main
+        target_branch: github-repo
+        github_token: ${{ secrets[matrix.token] }}
+    - uses: actions/setup-node@v3
+      with:
+        registry-url: ${{ matrix.registry }}
+    - name: node cache
+      id: node-cache
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: yarn install
+      if: steps.node-cache.outputs.cache-hit != 'true'
+      run: yarn install
+    - run: yarn build --if-present
+      env:
+        CI: true
+    - run: yarn publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets[matrix.token] }}
