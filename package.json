@@ -1,10 +1,10 @@
 {
-  "name": "SplitCubicalBezier",
+  "name": "split-cubical-bezier",
   "version": "0.0.1",
-  "main": "index.js",
-  "repository": "https://github.com/black7375/SplitCubicalBezier.git",
   "author": "alstjr7375 <alstjr7375@daum.net>",
-  "license": "Unknown",
+  "license": "CC-BY-SA-4.0",
+  "repository": "https://github.com/black7375/SplitCubicalBezier.git",
+  "main": "build/index.js",
   "devDependencies": {
     "@types/node": "^17.0.21",
     "ts-node": "^10.5.0",
