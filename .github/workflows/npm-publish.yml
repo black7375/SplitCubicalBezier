@@ -26,7 +26,7 @@ jobs:
     - name: yarn install
       if: steps.node-cache.outputs.cache-hit != 'true'
       run: yarn install
-    - run: yarn build --if-present
+    - run: yarn build
       env:
         CI: true
     - name: Commit Build File
@@ -76,7 +76,7 @@ jobs:
     - name: yarn install
       if: steps.node-cache.outputs.cache-hit != 'true'
       run: yarn install
-    - run: yarn build --if-present
+    - run: yarn build
       env:
         CI: true
     - run: yarn publish
